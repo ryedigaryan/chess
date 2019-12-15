@@ -1,6 +1,7 @@
 package rub.learn.groovy.chess.backend.model.chessman
 
-import rub.learn.groovy.chess.backend.model.geo.Position;
+import rub.learn.groovy.chess.common.Position
+
 
 interface ChessmanDelegate {
 

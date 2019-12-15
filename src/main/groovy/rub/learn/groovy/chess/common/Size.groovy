@@ -1,4 +1,4 @@
-package rub.learn.groovy.chess.backend.model.geo
+package rub.learn.groovy.chess.common
 
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor

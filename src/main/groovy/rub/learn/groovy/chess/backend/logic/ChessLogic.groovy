@@ -3,25 +3,39 @@ package rub.learn.groovy.chess.backend.logic
 import rub.learn.groovy.chess.backend.model.ClassicChessboard
 import rub.learn.groovy.chess.backend.model.Player
 import rub.learn.groovy.chess.backend.model.chessman.Chessman
-import rub.learn.groovy.chess.backend.model.geo.Position
+import rub.learn.groovy.chess.common.Position
+import rub.learn.groovy.chess.connector.ChessBackend
+import rub.learn.groovy.chess.connector.ChessBackendDelegate
 
-class GameEngine {
+class ChessLogic implements ChessBackend {
     final ClassicChessboard board = new ClassicChessboard()
     final Player[] players = new Player[2];
-    final GameEngineDelegate delegate;
+    private List<ChessBackendDelegate> delegates
     private boolean gameEnded;
 
     // defines which player's turn is now
     private int currPlayerId;
 
-    GameEngine(Player first, Player second, GameEngineDelegate delegate) {
-        assert delegate != null;
-        this.delegate = delegate;
+    ChessLogic() {
+    }
+
+    ChessLogic(Player first, Player second) {
         players[0] = first;
         players[1] = second;
     }
 
-    private void changeTurn() {
+    @Override
+    void setFirstPlayer(Player first) {
+        players[0] = first;
+    }
+
+    @Override
+    void setSecondPlayer(Player second) {
+        players[1] = second;
+    }
+
+    @Override
+    void changeTurn() {
         currPlayerId = nextPlayerId;
     }
 
@@ -29,6 +43,7 @@ class GameEngine {
         return currPlayerId == 0 ? 1 : 0;
     }
 
+    @Override
     Player getCurrentPlayer() {
         return players[currPlayerId];
     }
@@ -37,6 +52,12 @@ class GameEngine {
         return players[getNextPlayerId()]
     }
 
+    @Override
+    void addDelegate(ChessBackendDelegate delegate) {
+        delegates.add(delegate);
+    }
+
+    @Override
     void moveChessman(Position from, Position to) {
         assert from != null;
         assert to != null;
@@ -48,7 +69,7 @@ class GameEngine {
         if (movable == null) {
             return
         }
-        if(movable.getType() != getCurrentPlayer().getChessmanType()) {
+        if (movable.getType() != getCurrentPlayer().getChessmanType()) {
             return
         }
         Chessman destination = board.getAt(to.row, to.column)
@@ -66,15 +87,17 @@ class GameEngine {
 
     private void checkGameState() {
         checkCurrentPlayerWon()
-        if(!gameEnded) {
+        if (!gameEnded) {
             checkDraw();
         }
     }
 
     private void checkCurrentPlayerWon() {
         if (board.getCount(nextPlayer.chessmanType) == 0) {
-            delegate.gameWon(currentPlayer)
-            delegate.gameLost(nextPlayer)
+            for (delegate in delegates) {
+                delegate.gameWon(currentPlayer)
+                delegate.gameLost(nextPlayer)
+            }
             gameEnded = true;
         }
     }
@@ -85,14 +108,16 @@ class GameEngine {
 
         List<Position> kingPositions = kingOfNext.getNextPossiblePositions()
         Set<Position> attackingPositions = getAttackingPositions(chessmenOfCurrent)
-        if(attackingPositions.containsAll(kingPositions)) {
-            delegate.gameDraw(players[0], players[1])
+        if (attackingPositions.containsAll(kingPositions)) {
+            for (delegate in delegates) {
+                delegate.gameDraw(players[0], players[1])
+            }
         }
     }
 
     private static Set<Position> getAttackingPositions(List<Chessman> chessmen) {
         Set<Position> result = new HashSet<>();
-        for(c in chessmen) {
+        for (c in chessmen) {
             result.addAll(c.getNextPossiblePositions())
         }
         return result;

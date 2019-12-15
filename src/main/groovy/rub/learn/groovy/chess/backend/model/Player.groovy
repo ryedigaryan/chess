@@ -1,7 +1,7 @@
 package rub.learn.groovy.chess.backend.model
 
 import groovy.transform.TupleConstructor
-import rub.learn.groovy.chess.backend.model.chessman.ChessmanType
+import rub.learn.groovy.chess.common.ChessmanType
 
 
 @TupleConstructor(force = true)

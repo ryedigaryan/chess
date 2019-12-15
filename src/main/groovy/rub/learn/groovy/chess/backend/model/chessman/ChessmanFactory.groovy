@@ -1,7 +1,8 @@
 package rub.learn.groovy.chess.backend.model.chessman
 
 import rub.learn.groovy.chess.backend.model.Board
-import rub.learn.groovy.chess.backend.model.geo.Position
+import rub.learn.groovy.chess.common.ChessmanType
+import rub.learn.groovy.chess.common.Position
 
 final class ChessmanFactory {
 

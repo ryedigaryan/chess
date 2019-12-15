@@ -3,8 +3,8 @@ package rub.learn.groovy.chess.backend.model
 import rub.learn.groovy.chess.backend.model.chessman.Chessman
 import rub.learn.groovy.chess.backend.model.chessman.ChessmanDelegate
 import rub.learn.groovy.chess.backend.model.chessman.ChessmanFactory
-import rub.learn.groovy.chess.backend.model.geo.Position
-import rub.learn.groovy.chess.backend.model.geo.Size
+import rub.learn.groovy.chess.common.Position
+import rub.learn.groovy.chess.common.Size
 
 abstract class Board implements ChessmanDelegate {
 

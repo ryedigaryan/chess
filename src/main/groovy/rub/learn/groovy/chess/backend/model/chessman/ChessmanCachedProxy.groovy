@@ -1,7 +1,8 @@
 package rub.learn.groovy.chess.backend.model.chessman
 
+import rub.learn.groovy.chess.common.ChessmanType
+import rub.learn.groovy.chess.common.Position
 
-import rub.learn.groovy.chess.backend.model.geo.Position
 
 class ChessmanCachedProxy implements Chessman, ChessmanDelegate {
 
@@ -21,6 +22,11 @@ class ChessmanCachedProxy implements Chessman, ChessmanDelegate {
     @Override
     ChessmanType getType() {
         return root.getType();
+    }
+
+    @Override
+    void setPosition(int row, int column) {
+        root.setPosition(row, column)
     }
 
     @Override

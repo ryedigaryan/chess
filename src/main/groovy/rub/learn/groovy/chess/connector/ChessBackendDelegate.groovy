@@ -1,8 +1,8 @@
-package rub.learn.groovy.chess.backend.logic
+package rub.learn.groovy.chess.connector
 
 import rub.learn.groovy.chess.backend.model.Player
 
-interface GameEngineDelegate {
+interface ChessBackendDelegate {
     void gameWon(Player winner);
     void gameLost(Player looser);
     void gameDraw(Player first, Player second);
