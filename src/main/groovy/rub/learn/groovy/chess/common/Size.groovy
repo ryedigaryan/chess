@@ -24,5 +24,9 @@ class Size {
     void rightShift(Size left) {
         left << this;
     }
+
+    Size plus(int v) {
+        return new Size(width: (width + v), height: (height + v))
+    }
 }
 

@@ -1,18 +1,21 @@
 package rub.learn.groovy.chess.backend.model.chessman
 
+import rub.learn.groovy.chess.common.ChessmanKind
 import rub.learn.groovy.chess.common.ChessmanType
-import rub.learn.groovy.chess.common.Position
+import rub.learn.groovy.chess.common.Point
 
 
 interface Chessman {
 
     ChessmanType getType();
 
-    List<Position> getNextPossiblePositions();
+    ChessmanKind getKind();
+
+    List<Point> getPossiblePath();
 
     void setPosition(int row, int column)
 
-    void moveTo(Position newPosition);
+    void moveTo(Point newPosition);
 
     void remove();
 

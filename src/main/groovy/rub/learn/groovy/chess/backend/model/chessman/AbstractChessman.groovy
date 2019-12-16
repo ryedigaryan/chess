@@ -1,29 +1,38 @@
 package rub.learn.groovy.chess.backend.model.chessman
 
 import rub.learn.groovy.chess.backend.model.Board
+import rub.learn.groovy.chess.common.ChessmanKind
 import rub.learn.groovy.chess.common.ChessmanType
-import rub.learn.groovy.chess.common.Position
+import rub.learn.groovy.chess.common.Point
 
 abstract class AbstractChessman implements Chessman {
     protected final List<ChessmanDelegate> delegates = new ArrayList<>();
-    protected final Position position = new Position();
+    protected final Point position = new Point();
     protected final Board board;
     protected final ChessmanType type;
+    protected final ChessmanKind kind;
 
-    AbstractChessman(Board board, ChessmanType type) {
+    AbstractChessman(Board board, ChessmanType type, ChessmanKind kind) {
         this.board = board
         this.type = type
+        this.kind = kind
     }
 
-    AbstractChessman(Position initialPosition, Board board, ChessmanType type) {
+    AbstractChessman(Point initialPosition, Board board, ChessmanType type, ChessmanKind kind) {
         position << initialPosition
         this.board = board
         this.type = type
+        this.kind = kind
     }
 
     @Override
     ChessmanType getType() {
         return type
+    }
+
+    @Override
+    ChessmanKind getKind() {
+        return kind;
     }
 
     @Override
@@ -34,10 +43,11 @@ abstract class AbstractChessman implements Chessman {
 
     @Override
     // does not checks if the newPosition is possible or not
-    void moveTo(Position newPosition) {
+    void moveTo(Point newPosition) {
         notifyMoving(newPosition);
+        Point oldPosition = new Point(position);
         position << newPosition;
-        notifyMoved(position)
+        notifyMoved(oldPosition)
     }
 
     @Override
@@ -47,7 +57,7 @@ abstract class AbstractChessman implements Chessman {
 
     void notifyRemoved() {
         for (d in delegates) {
-            d.removed(this);
+            d.removed(this, position);
         }
     }
 
@@ -56,31 +66,31 @@ abstract class AbstractChessman implements Chessman {
         delegates.add(dlg)
     }
 
-    protected void notifyMoving(Position p) {
+    protected void notifyMoving(Point newPosition) {
         for (d in delegates) {
-            d.movingTo(this, p);
+            d.movingTo(this, newPosition);
         }
     }
 
-    protected void notifyMoved(Position p) {
+    protected void notifyMoved(Point oldPosition) {
         for (d in delegates) {
-            d.moved(this);
+            d.moved(this, oldPosition);
         }
     }
 
-    protected void addAllInDirection(Position direction, ArrayList<Position> result) {
-        Position p = position + direction;
+    protected void addAllInDirection(Point direction, ArrayList<Point> path) {
+        Point p = position + direction;
         while (board.contains(p)) {
             if(board.isFriendAt(p, this)) {
                 // chessman can't move on the place, where other friendly chessman is located
-                // hence, we return before adding the position to the result list
+                // hence, we return before adding the position to the path
                 return
             }
-            result.add(p);
+            path.add(p);
             p += direction;
-            if(board.isEnemyAt(p, this)) {
+            if(board.contains(p) && board.isEnemyAt(p, this)) {
                 // chessman can move on the place, where an enemy chessman is located
-                // hence, we return after adding the position to the result list
+                // hence, we return after adding the position to the path
                 return
             }
         }

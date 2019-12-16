@@ -3,7 +3,7 @@ package rub.learn.groovy.chess.backend.model
 import rub.learn.groovy.chess.backend.model.chessman.Chessman
 import rub.learn.groovy.chess.backend.model.chessman.ChessmanDelegate
 import rub.learn.groovy.chess.backend.model.chessman.ChessmanFactory
-import rub.learn.groovy.chess.common.Position
+import rub.learn.groovy.chess.common.Point
 import rub.learn.groovy.chess.common.Size
 
 abstract class Board implements ChessmanDelegate {
@@ -20,11 +20,12 @@ abstract class Board implements ChessmanDelegate {
         return cf
     }
 
-    abstract boolean isEmptyAt(Position p);
-    abstract boolean isFriendAt(Position p, Chessman other);
-    abstract boolean isEnemyAt(Position p, Chessman other);
+    abstract Chessman getAt(Point p);
+    abstract boolean isEmptyAt(Point p);
+    abstract boolean isFriendAt(Point p, Chessman other);
+    abstract boolean isEnemyAt(Point p, Chessman other);
 
-    boolean contains(Position p) {
+    boolean contains(Point p) {
         if(p == null) {
             return false;
         }

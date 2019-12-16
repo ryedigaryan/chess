@@ -1,41 +1,62 @@
 package rub.learn.groovy.chess.backend.model.chessman
 
 import rub.learn.groovy.chess.backend.model.Board
+import rub.learn.groovy.chess.common.ChessmanKind
 import rub.learn.groovy.chess.common.ChessmanType
-import rub.learn.groovy.chess.common.Position
+import rub.learn.groovy.chess.common.Point
+import rub.learn.groovy.chess.common.Side
 
 class Pawn extends AbstractChessman {
 
     private int maxStep = 2;
 
     Pawn(Board board, ChessmanType type) {
-        super(board, type)
+        super(board, type, ChessmanKind.PAWN)
     }
 
-    Pawn(Position initialPosition, Board board, ChessmanType type) {
-        super(initialPosition, board, type)
+    Pawn(Point initialPosition, Board board, ChessmanType type) {
+        super(initialPosition, board, type, ChessmanKind.PAWN)
     }
 
     @Override
-    protected void notifyMoved(Position p) {
+    protected void notifyMoved(Point oldPosition) {
         if(maxStep == 2)
             maxStep = 1 // pawn can move 2 blocks only first time
 
-        super.notifyMoved(p)
+        super.notifyMoved(oldPosition)
     }
 
     @Override
-    List<Position> getNextPossiblePositions() {
-        ArrayList<Position> result = new ArrayList<>(maxStep);
+    List<Point> getPossiblePath() {
+        ArrayList<Point> path = new ArrayList<>(maxStep);
 
-        Position diff = new Position(0, 0);
-        for (diff.row = 1; diff.row <= maxStep; diff.row++) {
-            Position p = position + diff
-            if(board.contains(p) && !board.isFriendAt(p, this)) {
-                result.add(p);
+        Point diff = new Point(0, 0);
+        for (increaseToNext(diff); diff.row.abs() <= maxStep; increaseToNext(diff)) {
+            Point p = position + diff
+            if(board.contains(p) && (!board.isFriendAt(p, this) && !board.isEnemyAt(p, this))) {
+                path.add(p);
+            }
+            p = Side.LEFT.increment(p)
+            if(board.contains(p) && board.isEnemyAt(p, this)) {
+                // we can go and eat enemy
+                path.add(p);
+            }
+            p = Side.RIGHT.increment(p, 2)
+            if(board.contains(p) && board.isEnemyAt(p, this)) {
+                // we can go and eat enemy
+                path.add(p);
             }
         }
 
-        return result;
+        return path;
+    }
+
+    private void increaseToNext(Point p) {
+        p << getType().getSide().decrement(p)
+    }
+
+    @Override
+    String toString() {
+        return "p"
     }
 }

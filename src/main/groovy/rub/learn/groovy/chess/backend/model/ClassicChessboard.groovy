@@ -2,9 +2,9 @@ package rub.learn.groovy.chess.backend.model
 
 import rub.learn.groovy.chess.backend.model.chessman.Chessman
 import rub.learn.groovy.chess.backend.model.chessman.ChessmanFactory
-import rub.learn.groovy.chess.backend.model.chessman.King
+import rub.learn.groovy.chess.common.ChessmanKind
 import rub.learn.groovy.chess.common.ChessmanType
-import rub.learn.groovy.chess.common.Position
+import rub.learn.groovy.chess.common.Point
 import rub.learn.groovy.chess.common.Size
 
 class ClassicChessboard extends Board {
@@ -25,10 +25,10 @@ class ClassicChessboard extends Board {
     void initChessmen() {
         ChessmanFactory cf = chessmanFactory();
         // init pawns
-        for (int j = 0; j < size.width; j++) {
+        for (int j = 0; j < size.width; ++j) {
             placeAt(1, j, cf.whitePawn())
         }
-        for (int j = 0; j < size.width; j++) {
+        for (int j = 0; j < size.width; ++j) {
             placeAt(6, j, cf.blackPawn())
         }
         // init rocks
@@ -59,19 +59,24 @@ class ClassicChessboard extends Board {
     }
 
     @Override
-    boolean isEmptyAt(Position p) {
+    Chessman getAt(Point p) {
+        return grid[p.row][p.column];
+    }
+
+    @Override
+    boolean isEmptyAt(Point p) {
         return grid[p.row][p.column] == null
     }
 
     @Override
-    boolean isFriendAt(Position p, Chessman other) {
+    boolean isFriendAt(Point p, Chessman other) {
         assert other != null;
         Chessman c = grid[p.row][p.column]
         return other.isFriend(c);
     }
 
     @Override
-    boolean isEnemyAt(Position p, Chessman other) {
+    boolean isEnemyAt(Point p, Chessman other) {
         assert other != null;
         Chessman c = grid[p.row][p.column]
         return other.isEnemy(c);
@@ -94,7 +99,7 @@ class ClassicChessboard extends Board {
 
     Chessman getKingOf(ChessmanType type) {
         for(c in getAll(type)) {
-            if(c instanceof King) {
+            if(c.getKind() == ChessmanKind.KING) {
                 return c;
             }
         }
@@ -102,19 +107,20 @@ class ClassicChessboard extends Board {
     }
 
     @Override
-    void movingTo(Chessman c, Position p) {
-
+    void movingTo(Chessman c, Point newPosition) {
+        grid[newPosition.row][newPosition.column] = c;
     }
 
     @Override
-    void moved(Chessman c) {
-
+    void moved(Chessman c, Point oldPosition) {
+        grid[oldPosition.row][oldPosition.column] = null;
     }
 
     @Override
-    void removed(Chessman chessman) {
+    void removed(Chessman chessman, Point position) {
         boolean removed = chessmen.get(chessman.getType())
                                   .remove(chessman)
+        grid[position.row][position.column] = null;
         assert removed;
     }
 

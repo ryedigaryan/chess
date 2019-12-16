@@ -1,32 +1,38 @@
 package rub.learn.groovy.chess.backend.model.chessman
 
 import rub.learn.groovy.chess.backend.model.Board
+import rub.learn.groovy.chess.common.ChessmanKind
 import rub.learn.groovy.chess.common.ChessmanType
-import rub.learn.groovy.chess.common.Position
+import rub.learn.groovy.chess.common.Point
 
 class Bishop extends AbstractChessman {
 
     Bishop(Board board, ChessmanType type) {
-        super(board, type)
+        super(board, type, ChessmanKind.BISHOP)
     }
 
-    Bishop(Position initialPosition, Board board, ChessmanType type) {
-        super(initialPosition, board, type)
+    Bishop(Point initialPosition, Board board, ChessmanType type) {
+        super(initialPosition, board, type, ChessmanKind.BISHOP)
     }
 
     @Override
-    List<Position> getNextPossiblePositions() {
-        List<Position> result = new ArrayList<>()
+    List<Point> getPossiblePath() {
+        List<Point> path = new ArrayList<>()
 
-        Position dir = new Position(1, 1);
-        addAllInDirection(dir, result)
-        dir.setColumn(-1);
-        addAllInDirection(dir, result)
-        dir.setRow(-1)
-        addAllInDirection(dir, result)
-        dir.setColumn(1)
-        addAllInDirection(dir, result)
+        Point dir = new Point(1, 1);
+        addAllInDirection(dir, path)
+        dir.rotateClockwise()
+        addAllInDirection(dir, path)
+        dir.rotateClockwise()
+        addAllInDirection(dir, path)
+        dir.rotateClockwise()
+        addAllInDirection(dir, path)
 
-        return result;
+        return path;
+    }
+
+    @Override
+    String toString() {
+        return "b"
     }
 }
