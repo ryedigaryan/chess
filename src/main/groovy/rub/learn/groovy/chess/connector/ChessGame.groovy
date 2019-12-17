@@ -1,5 +1,6 @@
 package rub.learn.groovy.chess.connector
 
+
 import rub.learn.groovy.chess.backend.model.Player
 import rub.learn.groovy.chess.common.ChessmanType
 import rub.learn.groovy.chess.common.Point
@@ -14,6 +15,10 @@ class ChessGame implements ChessBackendDelegate, ChessUIDelegate {
 
         backend.addDelegate(this);
         ui.addDelegate(this);
+
+        if(backend.currentPlayer != null) {
+            ui.setCurrentPlayer(backend.currentPlayer)
+        }
     }
 
     @Override
@@ -34,8 +39,13 @@ class ChessGame implements ChessBackendDelegate, ChessUIDelegate {
             return
         }
 
-        if(backend.moveChessman(from, to)) {
-            backend.changeTurn()
+        // 1. move chessman
+        // 2. if succeeded
+        // 3. then change turn
+        // 4. if succeeded
+        // 5. then setup UI
+        if(backend.moveChessman(from, to)
+                && backend.changeTurn()) {
             ui.setCurrentPlayer(backend.getCurrentPlayer())
         }
     }

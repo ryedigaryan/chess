@@ -41,6 +41,11 @@ class ChessmanCachingProxy implements Chessman, ChessmanDelegate {
     }
 
     @Override
+    Point getPosition() {
+        return root.getPosition()
+    }
+
+    @Override
     void moveTo(Point newPosition) {
         root.moveTo(newPosition)
     }

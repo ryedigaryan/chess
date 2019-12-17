@@ -36,6 +36,11 @@ abstract class AbstractChessman implements Chessman {
     }
 
     @Override
+    Point getPosition() {
+        return position;
+    }
+
+    @Override
     void setPosition(int row, int column) {
         position.row = row;
         position.column = column;
@@ -82,14 +87,14 @@ abstract class AbstractChessman implements Chessman {
         Point p = position + direction;
         while (board.contains(p)) {
             if(board.isFriendAt(p, this)) {
-                // chessman can't move on the place, where other friendly chessman is located
-                // hence, we return before adding the position to the path
+                // chessman CAN'T move on the place, where other friendly chessman is located
+                // hence, we return BEFORE adding the position to the path
                 return
             }
             path.add(p);
             if(board.isEnemyAt(p, this)) {
-                // chessman can move on the place, where an enemy chessman is located
-                // hence, we return after adding the position to the path
+                // chessman CAN move on the place, where an enemy chessman is located
+                // hence, we return AFTER adding the position to the path
                 return
             }
             p += direction;

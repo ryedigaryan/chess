@@ -1,6 +1,6 @@
 package rub.learn.groovy.chess
 
-import rub.learn.groovy.chess.backend.logic.ChessLogic
+import rub.learn.groovy.chess.backend.logic.ClassicChessLogic
 import rub.learn.groovy.chess.cli.ChessGameCLI
 import rub.learn.groovy.chess.cli.ChessUICLI
 import rub.learn.groovy.chess.common.ChessmanType
@@ -13,8 +13,9 @@ class AppRunner {
         println("Running on Groovy " + GroovySystem.getVersion())
         PrintStream output = System.out
         Scanner input = new Scanner(System.in)
+        PrintStream errorOutput = new PrintStream(new FileOutputStream("error.log"))
 
-        ChessBackend backend = new ChessLogic()
+        ChessBackend backend = new ClassicChessLogic(errorOutput)
         ChessUI ui = new ChessUICLI(output, input);
         ChessGame game = new ChessGame(backend, ui)
 

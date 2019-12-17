@@ -13,6 +13,8 @@ interface Chessman {
 
     List<Point> getPossiblePath();
 
+    Point getPosition();
+
     void setPosition(int row, int column)
 
     void moveTo(Point newPosition);

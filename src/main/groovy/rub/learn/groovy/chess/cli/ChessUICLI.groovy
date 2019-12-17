@@ -3,11 +3,7 @@ package rub.learn.groovy.chess.cli
 import rub.learn.groovy.chess.backend.model.Board
 import rub.learn.groovy.chess.backend.model.Player
 import rub.learn.groovy.chess.backend.model.chessman.Chessman
-import rub.learn.groovy.chess.common.ChessmanKind
-import rub.learn.groovy.chess.common.ChessmanType
-import rub.learn.groovy.chess.common.Point
-import rub.learn.groovy.chess.common.Side
-import rub.learn.groovy.chess.common.Size
+import rub.learn.groovy.chess.common.*
 import rub.learn.groovy.chess.connector.ChessUI
 import rub.learn.groovy.chess.connector.ChessUIDelegate
 

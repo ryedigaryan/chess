@@ -13,7 +13,7 @@ interface ChessBackend {
 
     Player getCurrentPlayer();
 
-    void changeTurn();
+    boolean changeTurn();
 
     // returns true if succeeded, usually changeTurns() should be called if succeeded
     boolean moveChessman(Point from, Point to);
