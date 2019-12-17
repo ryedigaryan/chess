@@ -6,6 +6,7 @@ import rub.learn.groovy.chess.backend.model.chessman.Chessman
 import rub.learn.groovy.chess.common.ChessmanKind
 import rub.learn.groovy.chess.common.ChessmanType
 import rub.learn.groovy.chess.common.Point
+import rub.learn.groovy.chess.common.Side
 import rub.learn.groovy.chess.common.Size
 import rub.learn.groovy.chess.connector.ChessUI
 import rub.learn.groovy.chess.connector.ChessUIDelegate
@@ -35,7 +36,8 @@ class ChessUICLI implements ChessUI {
     @Override
     void showBoard(Board board) {
         char[][] textBoard = boardToText(board);
-        printTextBoard(textBoard);
+        boolean reversed = (currentPlayer.getChessmanType().getSide() == Side.BOTTOM);
+        printTextBoard(textBoard, reversed);
     }
 
     @Override
@@ -43,9 +45,21 @@ class ChessUICLI implements ChessUI {
         output.println(System.lineSeparator() * 20)
     }
 
-    void printTextBoard(char[][] textBoard) {
+    void printTextBoard(char[][] textBoard, boolean reversed) {
         Size s = new Size(textBoard.length, textBoard[0].length)
+        if(reversed)
         for (Point p = [s.height - 1, 0]; p.row >= 0; p.row--) {
+            for (p.column = 0; p.column < s.width; p.column++) {
+                if (p.row > 0 && p.column > 0 && p.row < s.height - 1 && p.column < s.width - 1) {
+                    printChessTile(p, textBoard[p.row][p.column])
+                } else {
+                    output.print(textBoard[p.row][p.column])
+                }
+            }
+            output.println()
+        }
+        else
+        for (Point p = [0, 0]; p.row < s.height; p.row++) {
             for (p.column = 0; p.column < s.width; p.column++) {
                 if (p.row > 0 && p.column > 0 && p.row < s.height - 1 && p.column < s.width - 1) {
                     printChessTile(p, textBoard[p.row][p.column])

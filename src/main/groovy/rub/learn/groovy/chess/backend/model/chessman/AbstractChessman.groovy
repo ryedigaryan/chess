@@ -87,12 +87,12 @@ abstract class AbstractChessman implements Chessman {
                 return
             }
             path.add(p);
-            p += direction;
-            if(board.contains(p) && board.isEnemyAt(p, this)) {
+            if(board.isEnemyAt(p, this)) {
                 // chessman can move on the place, where an enemy chessman is located
                 // hence, we return after adding the position to the path
                 return
             }
+            p += direction;
         }
     }
 }
