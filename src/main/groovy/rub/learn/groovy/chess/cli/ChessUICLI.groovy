@@ -135,7 +135,7 @@ class ChessUICLI implements ChessUI {
     }
 
     private static Point parsePosition(String cmd) {
-        int r = cmd.charAt(0) - ('A' as char) // Chessboard rows are symbols from 'A' to 'Z'
+        int r = Character.toUpperCase(cmd.charAt(0)) - ('A' as char) // Chessboard rows are symbols from 'A' to 'Z'
         int c = cmd.charAt(1) - ('1' as char) // Chessboard columns are numbers from 1 to 8
 
         return new Point(r, c)
