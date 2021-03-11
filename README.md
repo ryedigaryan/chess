@@ -1,0 +1,1 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f136bea87e114a359556c80e958c1feb)](https://www.codacy.com/gh/ryedigaryan/chess/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ryedigaryan/chess&amp;utm_campaign=Badge_Grade)
